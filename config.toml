@@ -1,0 +1,15 @@
+baseURL = '/'
+languageCode = 'en-us'
+title = 'OGOHLANTIRISH'
+theme = "etch"
+
+ignoreFiles = ["/1/1"]
+[languages]
+  [languages.en]
+    title = ""
+    languageName = "en"
+    weight = 1
+  [languages.uz]
+    title = ""
+    languageName = "uz"
+    weight = 2
