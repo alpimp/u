@@ -3,13 +3,70 @@ languageCode = 'en-us'
 title = 'OGOHLANTIRISH'
 theme = "etch"
 
-ignoreFiles = ["/1/1"]
+ignoreFiles = ["/1/12"]
+
 [languages]
-  [languages.en]
+    [languages.en]
     title = ""
     languageName = "en"
     weight = 1
-  [languages.uz]
+    [languages.uz]
     title = ""
     languageName = "uz"
     weight = 2
+
+
+    [languages.gr]
+    title = ""
+    languageName = "gr"
+    weight = 3
+
+    [languages.fr]
+    title = ""
+    languageName = "FR"
+    weight = 3
+
+
+    [languages.jp]
+    title = ""
+    languageName = "JP"
+    weight = 4
+
+
+    [languages.kr]
+    title = ""
+    languageName = "KR"
+    weight = 5
+
+    [languages.de]
+    title = ""
+    languageName = "de"
+    weight = 6
+
+
+    [languages.pl]
+    title = ""
+    languageName = "pl"
+    weight = 7
+
+    [languages.nl]
+    title = ""
+    languageName = "nl"
+    weight = 8
+
+    [languages.it]
+    title = ""
+    languageName = "it"
+    weight = 9
+
+    [languages.es]
+    title = ""
+    languageName = "es"
+    weight = 10 
+
+    [languages.se]
+    title = ""
+    languageName = "se"
+    weight = 11 
+
+
