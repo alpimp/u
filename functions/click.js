@@ -5,8 +5,13 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const ref = request.headers.get('referer') || '';
   const pparams = url.searchParams;
+
+  console.log('ref is ' + ref);
+  console.log('my params are ' + pparams);
+
   const ip1 = request.headers.get("Cf-Connecting-Ip");
   const ip = ip1 || "";
+
   const date = new Date();
   const dt = date.toLocaleString('en-US', {
     weekday: 'long',
@@ -28,7 +33,9 @@ export async function onRequest(context) {
     destinationURL += '?' + pparams.toString();
   }
 
-  return Response.redirect(destinationURL, 301);
+  console.log('Redirecting to: ' + destinationURL);
+
+  return Response.redirect(destinationURL, 303);
 }
 
 async function createNotionPage(body, env) {
@@ -42,45 +49,34 @@ async function createNotionPage(body, env) {
     },
   })
   .then(res => res.json())
-  .catch(err => console.error(err));
+  .catch(err => {
+    console.error(err);
+    throw err;
+  });
 }
 
 async function handleFormSubmit(rr, i, d, request, env) {
-  const requestBody = {
-    parent: {
-      database_id: env.DB2_ID,
-    },
-    properties: {
-      Display: {
-        title: [{ text: { content: "BL" } }],
+  try {
+    const requestBody = {
+      parent: {
+        database_id: env.DB2_ID,
       },
-      Touch: {
-        rich_text: [{ text: { content: "BL" } }],
+      properties: {
+        Display: { title: [{ text: { content: "BL" } }] },
+        Touch: { rich_text: [{ text: { content: "BL" } }] },
+        Lang: { rich_text: [{ text: { content: "BL" } }] },
+        TZ: { rich_text: [{ text: { content: "BL" } }] },
+        "FDB type": { multi_select: [{ name: "BL" }] },
+        Messaga: { rich_text: [{ text: { content: d } }] },
+        Location: { rich_text: [{ text: { content: rr } }] },
+        IP: { rich_text: [{ text: { content: i } }] },
+        Accel: { rich_text: [{ text: { content: "Waiting.." } }] },
       },
-      Lang: {
-        rich_text: [{ text: { content: "BL" } }],
-      },
-      TZ: {
-        rich_text: [{ text: { content: "BL" } }],
-      },
-      "FDB type": {
-        multi_select: [{ name: "BL" }],
-      },
-      Messaga: {
-        rich_text: [{ text: { content: d } }],
-      },
-      Location: {
-        rich_text: [{ text: { content: rr } }],
-      },
-      IP: {
-        rich_text: [{ text: { content: i } }],
-      },
-      Accel: {
-        rich_text: [{ text: { content: "Waiting.." } }],
-      },
-    },
-  };
+    };
 
-  await createNotionPage(requestBody, env);
-  console.info(JSON.stringify(requestBody));
+    await createNotionPage(requestBody, env);
+    console.info(JSON.stringify(requestBody));
+  } catch (error) {
+    console.error('Error handling form submit:', error);
+  }
 }
