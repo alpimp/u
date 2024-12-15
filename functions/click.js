@@ -1,4 +1,3 @@
-// Cloudflare Function for handling click events
 export async function onRequest(context) {
   const { request, env } = context;
 
