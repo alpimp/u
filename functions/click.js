@@ -5,13 +5,8 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const ref = request.headers.get('referer') || '';
   const pparams = url.searchParams;
-
-  console.log('ref is ' + ref);
-  console.log('my params are ' + pparams);
-
   const ip1 = request.headers.get("Cf-Connecting-Ip");
   const ip = ip1 || "";
-
   const date = new Date();
   const dt = date.toLocaleString('en-US', {
     weekday: 'long',
