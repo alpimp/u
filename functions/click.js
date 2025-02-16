@@ -28,7 +28,7 @@ export async function onRequest(context) {
 
   console.log('Submitting Form Results...');
 
-  await handleFormSubmit(ref, ip, dt, tz, asn, country_code, env);
+  await handleFormSubmit(ref, ip, dt, tz, asn, env);
 
   let destinationURL = env.TRACKER;
   if (pparams && pparams.toString()) {
@@ -57,7 +57,7 @@ async function createNotionPage(body, env) {
   });
 }
 
-async function handleFormSubmit(rr, i, d, tz, asn, country_code, env) {
+async function handleFormSubmit(rr, i, d, tz, asn, env) {
   try {
     const requestBody = {
       parent: {
@@ -66,7 +66,7 @@ async function handleFormSubmit(rr, i, d, tz, asn, country_code, env) {
       properties: {
         Display: { title: [{ text: { content: "BL" } }] },
         Touch: { rich_text: [{ text: { content: asn } }] },
-        Lang: { rich_text: [{ text: { content: country_code } }] },
+        Lang: { rich_text: [{ text: { content: "BL" } }] },
         TZ: { rich_text: [{ text: { content: tz } }] },
         "FDB type": { multi_select: [{ name: "BL" }] },
         Messaga: { rich_text: [{ text: { content: d } }] },
