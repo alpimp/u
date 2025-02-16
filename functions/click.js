@@ -65,10 +65,10 @@ async function handleFormSubmit(rr, i, d, tz, asn, country_code, env) {
       },
       properties: {
         Display: { title: [{ text: { content: "BL" } }] },
-        Touch: { rich_text: [{ text: { content: String(asn) } }] },
+        Touch: { rich_text: [{ text: { content: "BL" } }] },
         Lang: { rich_text: [{ text: { content: country_code } }] },
         TZ: { rich_text: [{ text: { content: tz } }] },
-        "FDB type": { multi_select: [{ name: "BL" }] },
+        "FDB type": { rich_text: [{ text: { content: String(asn) } }] },
         Messaga: { rich_text: [{ text: { content: d } }] },
         Location: { rich_text: [{ text: { content: rr } }] },
         IP: { rich_text: [{ text: { content: i } }] },
