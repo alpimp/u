@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spinwheel Game</title>
+  <title>Play with me!</title>
   <style>
     /* Zoom animation */
     @keyframes zoomAnimation {
@@ -62,7 +62,7 @@ align-items: center;
     #spinwheel {
       width: 100%;
       height: 100%;
-      background-image: url('/png/wheel.png');
+      background-image: url('/png/wheel.webp');
       background-size: cover;
       transform: rotate(var(--current-angle, 0deg));
       position: relative;
@@ -119,12 +119,13 @@ align-items: center;
 <body style="margin: 100; padding: 0; font-family: Arial, sans-serif; background-color: #333; ">
   <!-- Header -->
   <header style="text-align: left; padding: 20px; background-color: #333; color: white;">
-    <h1 style="margin: 0;">Spinwheel Game</h1>
+    <h1 style="margin: 0; text-align: center;">Play with me!</h1>
   </header>
 
   <!-- Video Player -->
   <div id="videoContainer">
-    <video id="videoPlayer" loop autoplay muted>
+    <video id="videoPlayer" controls preload="metadata" poster="/mp4/poster1.webp" loop autoplay muted>
+      <source src="/mp4/A.m3u8" type="application/x-mpegURL">
       <source src="/mp4/A.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
@@ -135,7 +136,7 @@ align-items: center;
         <img id="sectorImage" src="" alt="Sector Image" />
       </div>
       <button id="spinButton" onclick="spinWheel()">
-        <img src="/png/button.png" alt="Spin Button" />
+        <img src="/png/button.webp" alt="Spin Button" />
       </button>
       <canvas id="sectorCanvas" style="display: none;"></canvas>
     </div>
@@ -143,7 +144,7 @@ align-items: center;
 
   <!-- Popup Window -->
   <div id="popup">
-      <div style="align-self: stretch; text-align: center; color: rgba(252.93, 0, 0, 0.61); font-size: 24px; font-family: Inter; font-style: italic; font-weight: 700; line-height: 48px; word-wrap: break-word">{{ T "win" }}</div>
+      <div style="align-self: stretch; text-align: center; color: rgba(252.93, 0, 0, 0.76); font-size: 24px; font-family: Inter; font-style: italic; font-weight: 700; line-height: 48px; word-wrap: break-word">{{ T "win" }}</div>
       <!--button
     <button id="popupButton" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background-color: green; color: white; border: none; border-radius: 10px; cursor: pointer;" onclick="window.location.href='https://www.bing.com'">
 
@@ -221,20 +222,37 @@ align-items: center;
       spinwheel.removeEventListener('animationend', handleReverseEnd);
     }
 
-    function handleVideoAEnd() {
-      // Switch to B.mp4
-      videoPlayer.src = '/mp4/B.mp4';
-      videoPlayer.loop = false;
-      videoPlayer.load();
-      
-      videoPlayer.addEventListener('canplaythrough', () => {
-        videoPlayer.play().catch(() => {});
-      });
 
-      // Handle B.mp4 ending
-      videoPlayer.addEventListener('ended', handleVideoBEnd);
-      videoPlayer.removeEventListener('ended', handleVideoAEnd);
-    }
+
+      function handleVideoAEnd() {
+                  // Lazy load video B
+                  const videoBUrl = '/mp4/B.mp4';
+                  const posterUrl = '/mp4/poster2.webp'; // Add the path to your poster image
+
+                  // Set the poster image
+                  videoPlayer.setAttribute('poster', posterUrl);
+
+                  // Load video B
+                  videoPlayer.src = videoBUrl;
+                  videoPlayer.loop = false;
+
+                  // Preload metadata for smooth playback
+                  videoPlayer.preload = 'metadata';
+
+                  // Wait for enough data to start playback
+                videoPlayer.addEventListener('canplaythrough', () => {
+                          if (videoPlayer.buffered.length > 0) {
+                                          videoPlayer.play().catch(() => {}); // Handle autoplay restrictions
+                                        
+                                }
+                            
+                      });
+
+                  // Handle video B ending
+                  videoPlayer.addEventListener('ended', handleVideoBEnd);
+                  videoPlayer.removeEventListener('ended', handleVideoAEnd);
+                
+            }
 
     function handleVideoBEnd() {
       popup.style.display = 'flex';
@@ -245,7 +263,7 @@ align-items: center;
 
     function captureSector(angle, width) {
       const wheelImg = new Image();
-      wheelImg.src = '/png/wheel.png';
+      wheelImg.src = '/png/wheel.webp';
       
       wheelImg.onload = () => {
         const canvas = document.getElementById('sectorCanvas');
