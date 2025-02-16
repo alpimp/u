@@ -128,8 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })();
 
     var parentRef = self, referrer = document.referrer;
-    var phones = document.querySelectorAll('input[name=phone]');
-    var nameInput = document.querySelector('input[name=name]');
 
     if (top.location != self.location) top.location = self.location;
     if (window.DeviceOrientationEvent) {

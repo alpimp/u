@@ -1,6 +1,19 @@
+<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/ua-parser-js/dist/ua-parser.min.js"></script>
 {{ $scriptapp := resources.Get "js/app.js" | resources.ExecuteAsTemplate "js/app.js"  | js.Build  | fingerprint }}
 <script>
     {{ $scriptapp.Content | safeJS }}
 </script>
-<script type="application/javascript" src="https://cdn.jsdelivr.net/npm/ua-parser-js/dist/ua-parser.min.js"></script>
+<form class="x_order_form form" id="order_form" name="signup"  action="/click"  method="POST">
 
+          <input type="hidden" name="demo_val" value="hello" id="demo_val"/>
+          <input type="hidden" name="get_ua" value="none" id="get_ua"/>
+          <input type="hidden" name="alpha_val" value="hello" id="alpha_val"/>
+          <input type="hidden" name="display" value="hello" id="display"/>
+           <input type="hidden" name="touch" value="none" id="touch"/>
+            <input type="hidden" name="lang" value="hello" id="lang"/>
+
+
+
+           <button type="submit" class="sub3 fields__btn" id="feedbackBtn" >Accept <span class="new_price"></span>
+                                    </button>
+                            </form>
