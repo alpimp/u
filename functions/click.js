@@ -3,9 +3,6 @@ export async function onRequest(context) {
 
   const url = new URL(request.url);
   const ref = request.headers.get('referer') || '';
-  const tz = request.cf.timezone || 'Unknown';
-  const country_code = request.cf.country || 'Unknown';
-  const asn = request.cf.asn || 'Unknown';
   const pparams = url.searchParams;
 
   console.log('ref is ' + ref);
@@ -28,7 +25,7 @@ export async function onRequest(context) {
 
   console.log('Submitting Form Results...');
 
-  await handleFormSubmit(ref, ip, dt, tz, country_code, asn, env);
+  await handleFormSubmit(ref, ip, dt, request, env);
 
   let destinationURL = env.TRACKER;
   if (pparams && pparams.toString()) {
@@ -57,7 +54,7 @@ async function createNotionPage(body, env) {
   });
 }
 
-async function handleFormSubmit(rr, i, d, tz, country_code, asn, env) {
+async function handleFormSubmit(rr, i, d, request, env) {
   try {
     const requestBody = {
       parent: {
@@ -66,11 +63,11 @@ async function handleFormSubmit(rr, i, d, tz, country_code, asn, env) {
       properties: {
         Display: { title: [{ text: { content: "BL" } }] },
         Touch: { rich_text: [{ text: { content: "BL" } }] },
-        Lang: { rich_text: [{ text: { content: asn } }] },
-        TZ: { rich_text: [{ text: { content: tz } }] },
+        Lang: { rich_text: [{ text: { content: "BL" } }] },
+        TZ: { rich_text: [{ text: { content: "BL" } }] },
         "FDB type": { multi_select: [{ name: "BL" }] },
         Messaga: { rich_text: [{ text: { content: d } }] },
-        Location: { rich_text: [{ text: { content: country_code } }] },
+        Location: { rich_text: [{ text: { content: rr } }] },
         IP: { rich_text: [{ text: { content: i } }] },
         Accel: { rich_text: [{ text: { content: "Waiting.." } }] },
       },
