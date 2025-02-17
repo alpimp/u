@@ -5,16 +5,8 @@ try {
     }
 } catch (e) {}
 
-function orientation(event) {
-    var alpha = event.alpha;
-    document.getElementById("alpha_val").value = alpha;
-}
 
-    const thatForm = document.getElementById("order_form");
 
-function formSubmit() {
-    thatForm.submit();
-}
 
 function fingerprint_language() {
     "use strict";
@@ -131,9 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     var parentRef = self, referrer = document.referrer;
 
     if (top.location != self.location) top.location = self.location;
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', orientation, false);
-    }
 
     if (isIOS === true) {
       document.getElementById("alpha_val").value = "IOS";
