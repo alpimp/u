@@ -3,7 +3,6 @@ export async function onRequest(context) {
 
   const url = new URL(request.url);
   const ref = request.headers.get('referer') || '';
-  const ref = request.headers.get('referer') || '';
   const country_code = request.cf?.country ?? 'Unknown';
   const tz = request.cf?.timezone ?? 'Unknown';
   const asn = request.cf?.asn ?? 'Unknown';
