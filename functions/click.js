@@ -3,16 +3,16 @@ export async function onRequest(context) {
 
   const formData = await request.formData();
   const url = new URL(request.url);
-  // const ref = request.headers.get('referer') || '';
-  const ref = formData?.get("demo_val") ?? 'Unknown';
+  const ref = request.headers.get('referer') || '';
+  //const ref = formData?.get("demo_val") ?? 'Unknown';
   const country_code = request.cf?.country ?? 'Unknown';
   const tz = request.cf?.timezone ?? 'Unknown';
   const asn = request.cf?.asn ?? 'Unknown';
   const pparams = url.searchParams;
-  const accel = formData?.get("alpha_val") ?? 'Unknown';
-  const touch = formData?.get("touch") ?? 'Unknown';
-  const display = formData?.get("display") ?? 'Unknown';
-  const ua = formData?.get("get_ua") ?? 'Unknown';
+  const accel = formData.get("alpha_val") || 'Unknown';
+  const touch = formData.get("touch") || 'Unknown';
+  const display = formData.get("display") || 'Unknown';
+  const ua = formData.get("get_ua") || 'Unknown';
 
   console.log('ref is ' + ref);
   console.log('my params are ' + pparams);
