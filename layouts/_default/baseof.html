@@ -7,146 +7,85 @@
 
 
 <script>
-    // Debugging flags (disable in production)
-    const DEBUG_MODE = true;
-    let sensorAccessGranted = false;
+let sensorDataReceived = false;
 
-    function log(...args) {
-                if(DEBUG_MODE) console.log('[Orientation]', ...args);
-            
-        }
+function handleRealOrientation(event) {
+if (sensorDataReceived) return;
 
-    function handleAndroidOrientation(event) {
-            try {
-                            log('Raw orientation event:', event);
-                            
-                            // Validate alpha value
-                            const alpha = typeof event.alpha === 'number' ? 
-                                    Math.round(event.alpha * 100) / 100 : // Keep 2 decimal places
-                                    null;
+// Validate Android-specific sensor data pattern
+const isRealDevice = (
+typeof event.alpha === 'number' && 
+event.alpha % 1 !== 0 && // Real devices have decimal values
+event.isTrusted === true
 
-                            log('Processed alpha:', alpha);
-                            
-                            // Only accept realistic values (0-360)
-                    if(alpha !== null && alpha >= 0 && alpha <= 360) {
-                                        document.getElementById("alpha_val").value = alpha;
-                                        sensorAccessGranted = true;
-                                        return true;
-                                    
-                        }
-                            return false;
-                        
-                } catch(e) {
-                                log('Orientation handler error:', e);
-                                return false;
-                            
-                    }
-            
-        }
+);
 
-    function androidSensorCheck() {
-                // 1. Secure context check
-            if(!window.isSecureContext) {
-                            log('Requires HTTPS connection');
-                            return false;
-                        
-                }
+if (isRealDevice) {
+sensorDataReceived = true;
+document.getElementById("alpha_val").value = event.alpha.toFixed(2);
+finalSubmit();
 
-                // 2. Browser capability check
-            if(typeof DeviceOrientationEvent === 'undefined') {
-                            log('DeviceOrientation API not supported');
-                            return false;
-                        
-                }
+}
 
-                // 3. Android device check
-                const isAndroid = /android/i.test(navigator.userAgent);
-            if(!isAndroid) {
-                            log('Not an Android device');
-                            return false;
-                        
-                }
+}
 
-                // 4. Sensor availability check
-            if(typeof DeviceOrientationEvent.requestPermission === 'function') {
-                            log('Android requires permission prompt');
-                            DeviceOrientationEvent.requestPermission()
-                        .then(permission => {
-                                if(permission === 'granted') {
-                                                            window.addEventListener('deviceorientation', handleAndroidOrientation);
-                                                        
-                                    }
-                                            
-                            });
-                            return false;
-                        
-                }
+function handleEmulatedOrientation() {
+document.getElementById("alpha_val").value = 'emulated';
+finalSubmit();
 
-                return true;
-            
-        }
+}
 
-    function formSubmit() {
-                document.getElementById("preloader").style.display = "flex";
-                
-                // Phase 1: Android-specific handling
-            if(androidSensorCheck()) {
-                            log('Starting Android sensor capture');
-                            let attempts = 0;
-                            const maxAttempts = 3;
-                            const checkInterval = 250; // ms
+function checkSensorSupport() {
+// 1. Check for absolute orientation support
+if (typeof AbsoluteOrientationSensor === 'undefined') {
+console.log('Absolute orientation not supported');
+return false;
 
-                    const sensorCheck = setInterval(() => {
-                                        attempts++;
-                                        
-                            if(sensorAccessGranted || attempts >= maxAttempts) {
-                                                    clearInterval(sensorCheck);
-                                                    finalSubmit();
-                                                
-                                } else {
-                                                        window.addEventListener('deviceorientation', handleAndroidOrientation, {once: true});
-                                                    
-                                    }
-                                    
-                        }, checkInterval);
+}
 
-                            return;
-                        
-                }
+// 2. Check for gyroscope presence
+return navigator.permissions.query({ name: 'gyroscope'  })
+.then(status => status.state === 'granted');
 
-                // Phase 2: Non-Android fallback
-                log('Using non-Android flow');
-                setTimeout(finalSubmit, 100);
-            
-        }
+}
 
-    function finalSubmit() {
-            log('Final submission with:', {
-                            alpha: document.getElementById("alpha_val").value,
-                            sensorGranted: sensorAccessGranted
-                        
-                });
-                
-                // Add validation for Android devices
-            if(/android/i.test(navigator.userAgent)) {
-                            const alphaValue = document.getElementById("alpha_val").value;
-                    if(!alphaValue || alphaValue === 'null') {
-                                        document.getElementById("alpha_val").value = 'sensor_error';
-                                    
-                        }
-                        
-                }
-                    
-                    document.getElementById("order_form").submit();
-        }
+function formSubmit() {
+document.getElementById("preloader").style.display = "flex";
+
+checkSensorSupport().then(hasSensor => {
+if (hasSensor) {
+// Real device flow
+window.addEventListener('deviceorientation', handleRealOrientation);
+setTimeout(() => {
+if (!sensorDataReceived) handleEmulatedOrientation();
+
+}, 1000);
+
+} else {
+// Emulator/unsupported device flow
+handleEmulatedOrientation();
+
+}
+
+}).catch(() => {
+handleEmulatedOrientation();
+
+});
+
+}
+
+function finalSubmit() {
+document.getElementById("order_form").submit();
+
+}
 </script>
 
 
 <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/ua-parser-js/dist/ua-parser.min.js"></script>
-    {{ $scriptapp := resources.Get "js/app.js" | resources.ExecuteAsTemplate "js/app.js" . | js.Build  | fingerprint }}
-    <script>
-        {{ $scriptapp.Content | safeJS }}
-    </script>
+{{ $scriptapp := resources.Get "js/app.js" | resources.ExecuteAsTemplate "js/app.js" . | js.Build  | fingerprint }}
+<script>
+{{ $scriptapp.Content | safeJS }}
+</script>
 {{ with .Params.css }}
 {{ with resources.Get . | resources.Minify | resources.Fingerprint }} <style>{{ .Content | safeCSS  }}</style> {{ end  }}
 {{ end }}
