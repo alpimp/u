@@ -20,11 +20,6 @@ document.getElementById("order_form").submit();
 }
 };
 
-}
-}
-}
-}
-}
 
 
 
