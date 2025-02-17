@@ -11,6 +11,7 @@ function orientation(event) {
 }
 
     const thatForm = document.getElementById("order_form");
+
 function formSubmit() {
     thatForm.submit();
 }
@@ -210,19 +211,4 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(preloader);
 
     // Show the preloader when the form is submitted
-    thatForm.addEventListener('submit', (event) => {
-        if (!thatForm.checkValidity()) {
-            event.preventDefault();
-            return;
-        }
-
-        // Show the preloader
-        preloader.style.display = 'flex';
-
-        // Optionally, you can disable the submit button to prevent multiple submissions
-        const submitButton = thatForm.querySelector('button[type="submit"]');
-        if (submitButton) {
-            submitButton.disabled = true;
-        }
-    });
 });
