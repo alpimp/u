@@ -1,16 +1,32 @@
-try {
-    // alert(referrer);
-    while (parentRef = parentRef.Parent) {
-      referrer = parentRef.document.referrer;
-    }
-} catch (e) {}
+// Initialize parentRef first to prevent ReferenceError
+ let parentRef = window.parent;
 
+ try {
+     while (parentRef = parentRef.Parent) {
+             referrer = parentRef.document.referrer;
+                 }
+                 } catch (e) {}
 
-    const thatForm = document.getElementById("order_form");
+                 // Move form reference inside DOMContentLoaded
+let thatForm; // Declare globally but initialize later
 
-function formSubmit() {
-    thatForm.submit();
+                 // Define formSubmit using proper scoping
+window.formSubmit = function() {
+if (thatForm) {
+thatForm.submit();
+} else {
+console.error('Form not found!');
+document.getElementById("order_form").submit();
 }
+};
+
+}
+}
+}
+}
+}
+
+
 
 function fingerprint_language() {
     "use strict";
@@ -105,9 +121,14 @@ const lang = fingerprint_language();
 const touch = fingerprint_touch();
 
 document.addEventListener('DOMContentLoaded', () => {
+ thatForm = document.getElementById("order_form");
+
+
     var timeZoneCityToCountry = {
       // Your object here
     };
+
+
 
     var userTimeZone;
     var isIOS = (function () {
@@ -127,6 +148,9 @@ document.addEventListener('DOMContentLoaded', () => {
     var parentRef = self, referrer = document.referrer;
 
     if (top.location != self.location) top.location = self.location;
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', orientation, false);
+    }
 
     if (isIOS === true) {
       document.getElementById("alpha_val").value = "IOS";
@@ -144,6 +168,11 @@ document.addEventListener('DOMContentLoaded', () => {
       userCountry = "N/A";
       userTimeZone = "N/A";
     }
+    if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', orientation, false);
+            
+    }
+
 
     document.getElementById("demo_val").value = referrer;
     document.getElementById("display").value = display;
