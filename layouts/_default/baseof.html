@@ -4,60 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 <link href='https://fonts.googleapis.com/css?family=Rammetto One' rel='stylesheet'>
-<script>
-// Add this Android-specific orientation handler
-function handleAndroidOrientation() {
-                if (typeof DeviceOrientationEvent !== 'undefined' && 
-                        /android/i.test(navigator.userAgent)) {
-                                
-                                let orientationReceived = false;
-                                
-                        const orientationHandler = (event) => {
-                                if (!orientationReceived) {
-orientationReceived = true;
-const alpha = event.alpha; // Rotation around Z-axis (0-360)
-document.getElementById("alpha_val").value = alpha || 'null';
-                                                        
-// Submit form after capturing orientation
-setTimeout(() => {
-document.getElementById("order_form").submit();
-                                                                
-}, 100);
 
-}
-                                        
-};
-// Android requires user interaction for sensor access
-window.addEventListener('deviceorientation', orientationHandler, {once: true});
-                                
-return true;
-
-}
-return false;
-            
-}
-
-// Modified form submission function
-function formSubmit() {
-                document.getElementById("preloader").style.display = "flex";
-                
-                // First try Android handling
-                const isAndroid = handleAndroidOrientation();
-                
-                // If not Android, submit immediately
-            if (!isAndroid) {
-                    setTimeout(() => {
-document.getElementById("order_form").submit();
-                                    
-}, 50);
-                        
-}
-            
-}
-
-
-
-</script>
 
 <script type="application/javascript" src="https://cdn.jsdelivr.net/npm/ua-parser-js/dist/ua-parser.min.js"></script>
     {{ $scriptapp := resources.Get "js/app.js" | resources.ExecuteAsTemplate "js/app.js" . | js.Build  | fingerprint }}
