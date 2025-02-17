@@ -18,9 +18,9 @@
     <script>
         {{ $scriptapp.Content | safeJS }}
     </script>
-  {{ with .Params.css }}
-   {{ with resources.Get . | resources.Minify | resources.Fingerprint }} <style>{{ .Content | safeCSS  }}</style> {{ end  }}
-  {{ end }}
+{{ with .Params.css }}
+{{ with resources.Get . | resources.Minify | resources.Fingerprint }} <style>{{ .Content | safeCSS  }}</style> {{ end  }}
+{{ end }}
     
 
     <title>{{ block "title" . }}
