@@ -1,27 +1,20 @@
-// Initialize parentRef first to prevent ReferenceError
- let parentRef = window.parent;
+try {
+    // alert(referrer);
+    while (parentRef = parentRef.Parent) {
+      referrer = parentRef.document.referrer;
+    }
+} catch (e) {}
 
- try {
-     while (parentRef = parentRef.Parent) {
-             referrer = parentRef.document.referrer;
-                 }
-                 } catch (e) {}
-
-                 // Move form reference inside DOMContentLoaded
-let thatForm; // Declare globally but initialize later
-
-                 // Define formSubmit using proper scoping
-window.formSubmit = function() {
-if (thatForm) {
-thatForm.submit();
-} else {
-console.error('Form not found!');
-document.getElementById("order_form").submit();
+function orientation(event) {
+    var alpha = event.alpha;
+    document.getElementById("alpha_val").value = alpha;
 }
-};
 
+    const thatForm = document.getElementById("order_form");
 
-
+function formSubmit() {
+    thatForm.submit();
+}
 
 function fingerprint_language() {
     "use strict";
@@ -116,14 +109,9 @@ const lang = fingerprint_language();
 const touch = fingerprint_touch();
 
 document.addEventListener('DOMContentLoaded', () => {
- thatForm = document.getElementById("order_form");
-
-
     var timeZoneCityToCountry = {
       // Your object here
     };
-
-
 
     var userTimeZone;
     var isIOS = (function () {
@@ -163,11 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       userCountry = "N/A";
       userTimeZone = "N/A";
     }
-    if (window.DeviceOrientationEvent) {
-                window.addEventListener('deviceorientation', orientation, false);
-            
-    }
-
 
     document.getElementById("demo_val").value = referrer;
     document.getElementById("display").value = display;
