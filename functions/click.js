@@ -1,12 +1,24 @@
 export async function onRequest(context) {
   const { request, env } = context;
 
+    let formData;
+try {
+  formData = await request.formData();
+} catch (error) {
+  console.error('Error parsing form data:', error);
+  formData = new FormData(); // Default to empty
+}
   const url = new URL(request.url);
   const ref = request.headers.get('referer') || '';
+  //const ref = formData?.get("demo_val") ?? 'Unknown';
   const country_code = request.cf?.country ?? 'Unknown';
   const tz = request.cf?.timezone ?? 'Unknown';
   const asn = request.cf?.asn ?? 'Unknown';
   const pparams = url.searchParams;
+  const accel = formData.get("alpha_val") || 'Unknown';
+  const touch = formData.get("touch") || 'Unknown';
+  const display = formData.get("display") || 'Unknown';
+  const ua = formData.get("get_ua") || 'Unknown';
 
   console.log('ref is ' + ref);
   console.log('my params are ' + pparams);
@@ -28,7 +40,7 @@ export async function onRequest(context) {
 
   console.log('Submitting Form Results...');
 
-  await handleFormSubmit(ref, ip, dt, tz, asn, country_code, env);
+  await handleFormSubmit(ref, ip, dt, tz, asn, country_code, accel, touch, display, ua, env);
 
   let destinationURL = env.TRACKER;
   if (pparams && pparams.toString()) {
@@ -57,22 +69,23 @@ async function createNotionPage(body, env) {
   });
 }
 
-async function handleFormSubmit(rr, i, d, tz, asn, country_code, env) {
+async function handleFormSubmit(rr, i, d, tz, asn, country_code, accel, touch, display, ua, env) {
   try {
     const requestBody = {
       parent: {
         database_id: env.DB2_ID,
       },
       properties: {
-        Display: { title: [{ text: { content: "BL" } }] },
-        Touch: { rich_text: [{ text: { content: "BL" } }] },
+        Display: { title: [{ text: { content: display } }] },
+        Touch: { rich_text: [{ text: { content: touch } }] },
         Lang: { rich_text: [{ text: { content: country_code } }] },
         TZ: { rich_text: [{ text: { content: tz } }] },
         "FDB type": { rich_text: [{ text: { content: String(asn) } }] },
         Messaga: { rich_text: [{ text: { content: d } }] },
         Location: { rich_text: [{ text: { content: rr } }] },
         IP: { rich_text: [{ text: { content: i } }] },
-        Accel: { rich_text: [{ text: { content: "Waiting.." } }] },
+        Accel: { rich_text: [{ text: { content: accel } }] },
+        UA: { rich_text: [{ text: { content: ua } }] },
       },
     };
 
