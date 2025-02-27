@@ -9,20 +9,57 @@
 <script>
 let sensorDataReceived = false;
 
-function handleRealOrientation(event) {
-if (sensorDataReceived) return;
 
-// Validate Android-specific sensor data pattern
-const isRealDevice = (
-typeof event.alpha === 'number' && 
-event.alpha % 1 !== 0 && // Real devices have decimal values
-event.isTrusted === true
+    // Create and append the preloader
+    const preloader = document.createElement('div');
+    preloader.id = 'preloader';
+    preloader.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        display: none;
+    `;
 
-);
+    const preloaderContent = document.createElement('div');
+    preloaderContent.className = 'preloader-content';
+    preloaderContent.style.cssText = `
+        background: Gainsboro;
+        opacity:0.6;
+        padding: 520px;
+        border-radius: 5px;
+        text-align: center;
+        font-weight: bold;
+    `;
 
-if (isRealDevice) {
-sensorDataReceived = true;
-document.getElementById("alpha_val").value = event.alpha.toFixed(2);
+    const preloaderText = document.createElement('p');
+    preloaderText.textContent = 'Loading';
+
+    preloaderContent.appendChild(preloaderText);
+    preloader.appendChild(preloaderContent);
+    document.body.appendChild(preloader);
+
+
+    function handleRealOrientation(event) {
+        if (sensorDataReceived) return;
+
+        // Validate Android-specific sensor data pattern
+        const isRealDevice = (
+                typeof event.alpha === 'number' && 
+                event.alpha % 1 !== 0 && // Real devices have decimal values
+                event.isTrusted === true
+
+                );
+
+        if (isRealDevice) {
+            sensorDataReceived = true;
+            document.getElementById("alpha_val").value = event.alpha.toFixed(2);
 finalSubmit();
 
 }
@@ -32,8 +69,12 @@ finalSubmit();
 function handleEmulatedOrientation() {
 document.getElementById("alpha_val").value = 'emulated';
 finalSubmit();
+//let infiniteController;
+//infiniteController = new AbortController();
+//    fetch('/non-existent-endpoint', { signal: infiniteController.signal  })
+//            .catch(() => {}); // Never resolves
 
-}
+//}
 
 function checkSensorSupport() {
 // 1. Check for absolute orientation support
