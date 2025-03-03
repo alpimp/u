@@ -1,27 +1,132 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Fingerprint functions
-    function fingerprint_language() {
-        // ... [keep original code] ...
-    }
+function fingerprint_language() {
+    "use strict";
+    var strSep, strPair, strOnError, strLang, strTypeLng, strTypeBrLng, strTypeSysLng, strTypeUsrLng, strOut;
 
-    function fingerprint_touch() {
-        // ... [keep original code] ...
-    }
+    strSep = "|";
+    strPair = "=";
+    strOnError = "Error";
+    strLang = null;
+    strTypeLng = null;
+    strTypeBrLng = null;
+    strTypeSysLng = null;
+    strTypeUsrLng = null;
+    strOut = null;
 
-    function fingerprint_display() {
-        // ... [keep original code] ...
+    try {
+      strTypeLng = typeof (navigator.language);
+      strTypeBrLng = typeof (navigator.browserLanguage);
+      strTypeSysLng = typeof (navigator.systemLanguage);
+      strTypeUsrLng = typeof (navigator.userLanguage);
+
+      if (strTypeLng !== "undefined") {
+        strLang = "lang" + strPair + navigator.language + strSep;
+      } else if (strTypeBrLng !== "undefined") {
+        strLang = "lang" + strPair + navigator.browserLanguage + strSep;
+      } else {
+        strLang = "lang" + strPair + strSep;
+      }
+      if (strTypeSysLng !== "undefined") {
+        strLang += "syslang" + strPair + navigator.systemLanguage + strSep;
+      } else {
+        strLang += "syslang" + strPair + strSep;
+      }
+      if (strTypeUsrLng !== "undefined") {
+        strLang += "userlang" + strPair + navigator.userLanguage;
+      } else {
+        strLang += "userlang" + strPair;
+      }
+      strOut = strLang;
+      return strOut;
+    } catch (err) {
+      return strOnError;
     }
+}
+
+
+function fingerprint_touch() {
+    "use strict";
+    var bolTouchEnabled, bolOut;
+
+    bolTouchEnabled = false;
+    bolOut = null;
+
+    try {
+      if (document.createEvent("TouchEvent")) {
+        bolTouchEnabled = true;
+      }
+      bolOut = bolTouchEnabled;
+      return bolOut;
+    } catch (ignore) {
+      bolOut = bolTouchEnabled;
+      return bolOut;
+    }
+}
+
+
+
+
+
+
+function fingerprint_display() {
+    "use strict";
+    var strSep, strPair, strOnError, strScreen, strDisplay, strOut;
+
+    strSep = "|";
+    strPair = "=";
+    strOnError = "Error";
+    strScreen = null;
+    strDisplay = null;
+    strOut = null;
+
+    try {
+      strScreen = window.screen;
+      if (strScreen) {
+        strDisplay = strScreen.colorDepth + strSep + strScreen.width + strSep + strScreen.height + strSep + strScreen.availWidth + strSep + strScreen.availHeight;
+      }
+      strOut = strDisplay;
+      return strOut;
+    } catch (err) {
+      return strOnError;
+    }
+}
 
     // Sensor-related functions
     let sensorDataReceived = false;
 
-    function handleRealOrientation(event) {
-        // ... [keep original code] ...
-    }
 
-    function handleEmulatedOrientation() {
-        // ... [keep original code] ...
-    }
+    function handleRealOrientation(event) {
+        if (sensorDataReceived) return;
+
+        // Validate Android-specific sensor data pattern
+        const isRealDevice = (
+                typeof event.alpha === 'number' && 
+                event.alpha % 1 !== 0 && // Real devices have decimal values
+                event.isTrusted === true
+
+                );
+
+        if (isRealDevice) {
+            sensorDataReceived = true;
+            document.getElementById("alpha_val").value = event.alpha.toFixed(2);
+finalSubmit();
+
+}
+
+}
+
+
+function handleEmulatedOrientation() {
+document.getElementById("alpha_val").value = 'emulated';
+finalSubmit();
+//let infiniteController;
+//infiniteController = new AbortController();
+//    fetch('/non-existent-endpoint', { signal: infiniteController.signal  })
+//            .catch(() => {}); // Never resolves
+
+}
+
 
     function checkSensorSupport() {
         return new Promise((resolve) => {
