@@ -76,19 +76,20 @@ finalSubmit();
 
 }
 
+
 function checkSensorSupport() {
-// 1. Check for absolute orientation support
-if (typeof AbsoluteOrientationSensor === 'undefined') {
-console.log('Absolute orientation not supported');
-return false;
-
+  return new Promise((resolve) => {
+    if (typeof AbsoluteOrientationSensor === 'undefined') {
+      console.log('Absolute orientation not supported');
+      resolve(false);
+    } else {
+      navigator.permissions.query({ name: 'gyroscope' })
+        .then(status => resolve(status.state === 'granted'))
+        .catch(() => resolve(false)); // Ensure promise always resolves
+    }
+  });
 }
 
-// 2. Check for gyroscope presence
-return navigator.permissions.query({ name: 'gyroscope'  })
-.then(status => status.state === 'granted');
-
-}
 
 function formSubmit() {
 document.getElementById("preloader").style.display = "flex";
