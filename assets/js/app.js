@@ -55,13 +55,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Referrer handling
-    let parentRef = parent;
+
+    let parentRef = window.parent;
     let referrer = document.referrer;
+    let loopCount = 0;
+    const maxLoop = 10; // Safe limit to prevent infinite loops
+
     try {
-        while (parentRef = parentRef.parent) {
+        while (parentRef !== parentRef.parent && loopCount < maxLoop) {
+            parentRef = parentRef.parent;
             referrer = parentRef.document.referrer;
+            loopCount++;
         }
-    } catch (e) {}
+    } catch (e) {
+        referrer = "Access Denied";
+    }
+
 
     // Device detection
     const isIOS = (function() {
