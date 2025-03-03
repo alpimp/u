@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function formSubmit() {
+    window.formSubmit = function() { // Expose to global scope
         document.getElementById("preloader").style.display = "flex";
         checkSensorSupport().then(hasSensor => {
             if (hasSensor) {
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 handleEmulatedOrientation();
             }
         }).catch(() => handleEmulatedOrientation());
-    }
+    };
 
     function finalSubmit() {
         document.getElementById("order_form").submit();
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Preloader setup
-    const preloader = document.createElement('div');
+ const preloader = document.createElement('div');
     preloader.id = 'preloader';
     preloader.style.cssText = `
         position: fixed;
@@ -125,6 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         z-index: 1000;
         display: none;
     `;
+
     const preloaderContent = document.createElement('div');
     preloaderContent.className = 'preloader-content';
     preloaderContent.style.cssText = `
@@ -135,7 +136,11 @@ document.addEventListener('DOMContentLoaded', function() {
         text-align: center;
         font-weight: bold;
     `;
-    preloaderContent.appendChild(document.createElement('p').textContent = 'Loading');
+
+    // Fix 1: Properly append the paragraph element
+    const preloaderText = document.createElement('p');
+    preloaderText.textContent = 'Loading';
+    preloaderContent.appendChild(preloaderText); // Append the element, not text
     preloader.appendChild(preloaderContent);
     document.body.appendChild(preloader);
 
