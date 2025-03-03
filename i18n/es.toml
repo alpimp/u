@@ -1,11 +1,11 @@
 [home]
 other = "Home"
 [18]
-other = "ARE YOU 18+ ?"
+other = "¿Tienes más de 18 años?"
 [Wanna_meet]
 other = "Let's hang out!"
 [Yes]
-other = "YES"
+other = "SÍ"
 [No]
 other = "NO"
 [Click]
@@ -24,3 +24,7 @@ other = "START"
 other = "Muchas chicas calientes están esperando para abrir una sala de chat contigo.  ¿Listo para empezar a chatear?"
 [Msg]
 other = "NUEVO MENSAJE!"
+[nip]
+other = "¿De qué color son mis pezones?"
+[pick]
+other = "Elija"
