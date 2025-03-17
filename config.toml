@@ -54,6 +54,19 @@ theme = "etch"
     languageName = "nl"
     weight = 8
 
+    [languages.ar]
+    title = ""
+    languageName = "ar"
+    weight = 8
+
+
+    [languages.pt]
+    title = ""
+    languageName = "pt"
+    weight = 8
+
+
+
     [languages.it]
     title = ""
     languageName = "it"
