@@ -11,7 +11,7 @@ other = "NEIN"
 [Click]
 other = "Click here to find my profile"
 [Confirm]
-other = "Confirm age 18+"
+other = "Alter 18+ bestätigen"
 [Warning]
 other = "NUDITY WARNING"
 [Nude_photos]
