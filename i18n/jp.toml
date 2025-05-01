@@ -20,4 +20,6 @@ other = "新しいメッセージ！"
 other = "スタート"
 [win]
 other = "win"
+[spin]
+other = "ホイールを回す"
 

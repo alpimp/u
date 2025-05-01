@@ -24,3 +24,5 @@ other = "START"
 other = "Wiele gorących dziewczyn czeka, aby otworzyć z Tobą pokój czat.  Gotowy do rozpoczęcia rozmowy?"
 [Msg]
 other = "NOWA WIADOMOŚĆ!"
+[spin]
+other = "Zakręć kołem"

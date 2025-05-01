@@ -12,3 +12,5 @@ other = "いいえ"
 other = "절 찾으려면 여기를 클릭하세요"
 [Confirm]
 other = "18세 이상 연령 확인"
+[spin]
+other = "휠 돌리기"

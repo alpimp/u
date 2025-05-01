@@ -1,15 +1,16 @@
 {{define "main"}}
+{{ $slug := path.Base (strings.TrimSuffix "/" .RelPermalink)  }}
 <body style="margin: 100; padding: 0; font-family: Arial, sans-serif; background-color: #333; ">
   <!-- Header -->
   <header style="text-align: left; padding: 20px; background-color: #333; color: white;">
-    <h1 style="margin: 0; text-align: center;">Play with me!</h1>
+    <h1 style="margin: 0; text-align: center;">{{ T "spin" }}</h1>
   </header>
 
   <!-- Video Player -->
   <div id="videoContainer">
-    <video id="videoPlayer" playsinline preload="metadata" poster="/mp4/poster1.webp" loop autoplay muted>
-      <source src="/mp4/A.m3u8" type="application/x-mpegURL">
-      <source src="/mp4/A.mp4" type="video/mp4">
+    <video id="videoPlayer" playsinline preload="metadata" poster="/mp4/{{$slug}}poster1.webp" loop autoplay muted>
+      <source src="/mp4/{{$slug}}A.m3u8" type="application/x-mpegURL">
+      <source src="/mp4/{{$slug}}A.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
 
@@ -110,8 +111,8 @@
 
       function handleVideoAEnd() {
                   // Lazy load video B
-                  const videoBUrl = '/mp4/B.mp4';
-                  const posterUrl = '/mp4/poster2.webp'; // Add the path to your poster image
+                  const videoBUrl = '/mp4/{{$slug}}B.mp4';
+                  const posterUrl = '/mp4/{{$slug}}poster2.webp'; // Add the path to your poster image
 
                   // Set the poster image
                   videoPlayer.setAttribute('poster', posterUrl);

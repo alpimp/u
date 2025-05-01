@@ -24,3 +24,5 @@ other = "START"
 other = "Massor av snygga tjejer väntar på att öppna ett chattrum med bara dig. Kommer ni att låta dem göra det?"
 [Msg]
 other = "NYTT MEDDELANDE!"
+[spin]
+other = "Snurra pira hjulet"
